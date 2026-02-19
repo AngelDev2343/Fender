@@ -1,0 +1,102 @@
+.presentacion {
+    position: relative;
+    left: 0;
+}
+
+body {
+    background-color: rgb(31, 31, 31);
+}
+
+
+main {
+    margin: 0;
+    padding: 0;
+}
+
+nav.nav-active + main {
+  padding-top: 70px !important;
+}
+
+h1 {
+    font-size: 40px;
+    display: flex;
+    color: white;
+}
+
+.info {
+    position: absolute;
+    top: 30%;
+    left: 18%;
+    width: 38%;
+}
+
+button {
+    background: linear-gradient(0deg,rgba(242, 126, 126, 1) 0%, rgba(212, 73, 68, 1) 100%);
+    color: white;
+    padding: 10px 28px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 9px;
+}
+
+/* ================================== */
+/* ==== INICIO DE CAMBIOS AQUÍ ==== */
+/* ================================== */
+
+/* 1. Esta regla nueva aplica el tamaño, borde y sombra al DIV contenedor */
+.galeria-item {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    background-color: #ffffff; /* Fondo por si la imagen no carga */
+    overflow: hidden; /* Muy importante: recorta la imagen a las esquinas redondeadas */
+
+    /* ¡AQUÍ ESTÁ TU SOMBRA! Ahora en el div y será visible */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+/* 2. Esta regla hace que tu imagen llene el div (reemplaza a .galeria img) */
+.galeria-item img.guitarra {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Hace que la imagen llene el div sin deformarse */
+    display: block; /* Quita espacios extra */
+}
+
+/* 3. Se limpiaron los márgenes duplicados de .galeria */
+.galeria {
+    display: flex;
+    justify-content: space-around;
+    width: 70%;
+    /* Esto aplica 60px arriba/abajo y centrado horizontal (auto) */
+    margin: 60px auto;
+    gap: 10px;
+}
+
+/* 4. Eliminé la regla global "img { box-shadow... }" que tenías */
+
+
+/* ================================== */
+/* ==== FIN DE CAMBIOS ==== */
+/* ================================== */
+
+
+.h31 {
+    display: flex;
+    width: 65%;
+    color: rgb(224, 224, 224);
+    position: absolute;
+    justify-content: space-between;
+}
+
+
+
+.promos {
+    width: 100%;
+    background-color: black;
+    height: 500px;
+}

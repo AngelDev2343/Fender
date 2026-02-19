@@ -1,0 +1,47 @@
+.buy-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.buy-info img {
+    width: 70%;
+    height: 35%;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding-bottom: 200px;
+    padding-top: 200px;
+    padding-right: 40px;
+}
+
+main {
+    margin: 0;
+    padding: 0;
+}
+
+iframe {
+    width: 72.1%;
+    height: 600px;
+}
+
+.details {
+    padding: 40px;
+}
+
+.model {
+    color: #707070;
+}
+
+.btn-buy {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 13px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 40px;
+    cursor: pointer;
+    font-weight: bold;
+}
+

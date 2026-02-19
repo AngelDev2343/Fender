@@ -1,0 +1,227 @@
+/* ================================================
+ESTILOS RESPONSIVE
+Breakpoint principal: 768px (tablets y móviles)
+================================================
+*/
+
+@media (max-width: 768px) {
+
+    /* ============================
+       ESTILOS GENERALES (style.css)
+       ============================ */
+    
+    header {
+        /* Hacemos que el logo, la barra de búsqueda y los iconos se apilen verticalmente */
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 15px;
+        padding-right: 15px;
+        box-sizing: border-box; /* Para que el padding no afecte el ancho */
+    }
+
+    .logo {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .form-search {
+        /* La barra de búsqueda ocupa casi todo el ancho */
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .opciones {
+        /* Posicionamos los iconos de menú y perfil en la esquina superior derecha */
+        position: absolute;
+        top: 28px; /* Ajusta según sea necesario */
+        right: 15px;
+        margin-right: 0;
+        width: auto;
+    }
+
+    /* --- Navegación --- */
+    nav {
+        /* Hacemos que el menú ocupe todo el ancho */
+        width: 100%;
+        left: 0;
+        top: 89px; /* Ajustamos la posición inicial (oculto) */
+    }
+    
+    nav.nav-active {
+         /* Ajustamos la posición cuando está activo */
+        top: 178px;
+    }
+
+    nav ul {
+        /* Apilamos los enlaces de navegación verticalmente */
+        flex-direction: column;
+        width: 100%;
+    }
+
+    li {
+        /* Quitamos bordes laterales y añadimos un borde inferior */
+        border-right: none;
+        border-bottom: 1px solid #dedede;
+        text-align: center;
+        padding: 20px;
+    }
+
+    li.cart-icon {
+        padding: 20px;
+        border-right: none;
+        border-bottom: 1px solid #dedede;
+        justify-content: center; /* Centramos el icono del carrito */
+    }
+
+    li a:hover {
+        font-size: 16px; /* Mantenemos el tamaño de fuente en hover */
+    }
+    
+    /* --- Contenido Principal (index.html) --- */
+    main {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    nav.nav-active + main {
+      /* Ajustamos el padding-top del main cuando el menú está abierto */
+      padding-top: 360px; /* La altura aproximada del menú desplegado */
+    }
+
+    .btns {
+        /* Apilamos los botones de "Featured" */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px; /* Espacio entre botones */
+    }
+
+    .btn {
+        margin-right: 0;
+        width: 80%;
+        text-align: center;
+    }
+
+    .featured {
+        /* Centramos las tarjetas de productos */
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .tarjeta {
+        margin-right: 0;
+    }
+
+    /* ============================
+       PÁGINA CATEGORÍA (cat.css)
+       ============================ */
+    
+    .featured2 {
+        /* Centramos las tarjetas de categorías */
+        justify-content: center;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .tarjeta2 {
+        /* Reseteamos la escala para evitar que sea muy grande en móviles */
+        transform: scale(1);
+        margin: 20px 0;
+        height: auto; /* Altura automática */
+        max-height: none;
+        padding-bottom: 20px;
+    }
+
+    .tarjeta2:hover {
+        transform: scale(1.05); /* Mantenemos un hover sutil */
+    }
+
+    .tarjeta2 h3 {
+        position: static; /* Quitamos posicionamiento absoluto */
+        top: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0px 0;
+    }
+
+
+    /* ============================
+       PÁGINA CARRITO (cart.css)
+       ============================ */
+
+    .producto {
+        /* Apilamos los elementos del producto verticalmente */
+        flex-direction: column;
+        height: auto; /* Altura automática */
+        align-items: center;
+        padding: 15px;
+    }
+
+    .producto img {
+        margin-right: 0;
+        margin-bottom: 15px;
+        height: 160px; /* Hacemos la imagen un poco más pequeña */
+    }
+
+    .info {
+        /* Hacemos que la info ocupe todo el ancho y esté centrada */
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .btn-accion {
+        /* Quitamos el margen y centramos los botones */
+        margin-left: 0;
+        flex-direction: row; /* Ponemos botones uno al lado del otro */
+        gap: 15px; /* Espacio entre botones */
+    }
+
+    /* ============================
+       PÁGINA CUSTOM (custom.css)
+       ============================ */
+    
+    .promos {
+        height: auto; /* Altura automática para el banner */
+    }
+
+    .info {
+        /* Quitamos el posicionamiento absoluto */
+        position: relative;
+        width: 90%;
+        left: 0;
+        top: 0;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    h1 {
+        /* Reducimos el tamaño del título principal */
+        font-size: 28px;
+    }
+    
+    .h31 {
+        /* Apilamos los títulos de la galería */
+        position: relative;
+        flex-direction: column;
+        width: 90%;
+        margin: 20px auto;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .galeria {
+        /* Apilamos los ítems de la galería verticalmente */
+        flex-direction: column;
+        width: 90%;
+        align-items: center;
+        gap: 20px; /* Espacio entre ítems */
+        margin-top: 20px;
+    }
+
+    .galeria-item {
+        width: 250px; /* Ajustamos el tamaño */
+        height: 250px;
+    }
+}

@@ -1,0 +1,121 @@
+.productos-contenedor {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.producto {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 90%;
+    height: 230px;
+    transition: transform 0.3s ease;
+}
+
+.producto:hover {
+    transform: scale(1.02);
+}
+
+.producto img {
+    margin-right: 25px;
+    border-radius: 5px;
+}
+
+.precio {
+    font-weight: bold;
+    color: rgb(0, 209, 0);
+}
+
+.btn-accion {
+    display: flex;
+    flex-direction: column;
+    margin-left: 55%;
+}
+
+.info {
+    width: 30%;
+}
+
+.btn-borrar {
+    background-color: rgb(233, 15, 15);
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 25px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+}
+
+.btn-check {
+    background-color: rgb(9, 123, 216);
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 25px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+}
+
+.btn-add {
+    background-color: rgba(255, 255, 255, 0.322);
+    border: 1px solid rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-re {
+    background-color: rgba(255, 255, 255, 0.322);
+    border: 1px solid rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    cursor: pointer;
+}
+
+.minus {
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    justify-content: center;
+}
+
+.total {
+    margin-top: 30px;
+    margin-left: 4.5%;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 4.5%;
+    align-items: center;
+}
+
+.total h3 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.total .btn-add {
+    padding: 0px 10px;
+    height: 50px;
+    font-size: 14px;
+    align-items: center;
+    display: flex;
+}
