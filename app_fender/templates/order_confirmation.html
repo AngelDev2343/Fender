@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Order Confirmation</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/responsive.css' %}">
+    <style>
+        .confirmation-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .success-message h2 {
+            margin: 0 0 10px 0;
+        }
+
+        .order-info {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .order-info h3 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .shipping-address {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .order-items {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info h4 {
+            margin: 0 0 5px 0;
+        }
+
+        .item-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-top: 2px solid #000;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-continue {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-continue:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="{% url 'app_fender:home' %}">Home</a></li>
+            <li><a href="{% url 'app_fender:category_list' %}">Category</a></li>
+            <li><a href="{% url 'app_fender:product_list' %}">Shop</a></li>
+            <li><a href="{% url 'app_fender:custom' %}">Custom</a></li>
+            <li><a href="{% url 'app_fender:support' %}">Support</a></li>
+            <li class="cart-icon">
+                <a href="{% url 'app_fender:cart_detail' %}"><img src="{% static 'cart.png' %}" alt="Shopping Cart" title="Shopping Cart" width="30px"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="confirmation-container">
+            <div class="success-message">
+                <h2>✓ Order Placed Successfully!</h2>
+                <p>Thank you for your purchase. Your order has been confirmed.</p>
+            </div>
+
+            <div class="order-info">
+                <h3>Order Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Order Number:</span>
+                    <span>#{{ order.id }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date:</span>
+                    <span>{{ order.created_at|date:"F d, Y - g:i A" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method:</span>
+                    <span>Credit Card</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Amount:</span>
+                    <span>${{ order.total_amount }} USD</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Order Status:</span>
+                    <span><strong>{{ order.get_status_display }}</strong></span>
+                </div>
+
+                <div class="shipping-address">
+                    <h4>Shipping Address</h4>
+                    <p><strong>{{ order.shipping_full_name }}</strong></p>
+                    <p>{{ order.shipping_address_line1 }}</p>
+                    {% if order.shipping_address_line2 %}
+                        <p>{{ order.shipping_address_line2 }}</p>
+                    {% endif %}
+                    <p>{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_postal_code }}</p>
+                    <p>{{ order.shipping_country }}</p>
+                    <p>Phone: {{ order.shipping_phone }}</p>
+                </div>
+            </div>
+
+            <div class="order-items">
+                <h3>Order Items</h3>
+                {% for item in order_items %}
+                <div class="order-item">
+                    <div class="item-info">
+                        <h4>{{ item.product_variant.product.name }}</h4>
+                        <p>Color: {{ item.product_variant.color }}</p>
+                        <p>Quantity: {{ item.quantity }} × ${{ item.price }} USD</p>
+                    </div>
+                    <div class="item-price">
+                        <strong>${{ item.get_total_item_price }} USD</strong>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="order-total">
+                    <span>Total:</span>
+                    <span>${{ order.total_amount }} USD</span>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="{% url 'app_fender:home' %}" class="btn-continue">Continue Shopping</a>
+                <a href="{% url 'app_fender:profile' %}" class="btn-continue" style="background: #666;">View My Orders</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Product Details</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .product-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        .product-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .product-info strong {
+            display: inline-block;
+            width: 150px;
+            color: #333;
+        }
+        .variants-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .variants-table th, .variants-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .variants-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        .variant-img {
+            max-width: 60px;
+            height: auto;
+            border-radius: 4px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            background-color: #000;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <h2>Product Details - {{ product.name }}</h2>
+
+            <div class="product-section product-info">
+                <h3>Product Information</h3>
+                <p><strong>ID:</strong> {{ product.id }}</p>
+                <p><strong>Name:</strong> {{ product.name }}</p>
+                <p><strong>Category:</strong> {{ product.category.name|default:"No category" }}</p>
+                <p><strong>Slug:</strong> {{ product.slug }}</p>
+                <p><strong>Description:</strong></p>
+                <p style="margin-left: 150px;">{{ product.description|default:"No description available"|linebreaks }}</p>
+            </div>
+
+            <div class="product-section">
+                <h3>Product Variants ({{ product.variants.count }})</h3>
+                {% if product.variants.exists %}
+                <table class="variants-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Color</th>
+                            <th>Serial Number</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for variant in product.variants.all %}
+                        <tr>
+                            <td>
+                                {% if variant.image %}
+                                <img src="{{ variant.image.url }}" alt="{{ variant.color }}" class="variant-img">
+                                {% else %}
+                                <span style="color: #999;">No image</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ variant.color }}</td>
+                            <td>{{ variant.model_number|default:"N/A" }}</td>
+                            <td>${{ variant.price }}</td>
+                            <td>{{ variant.stock }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="color: #999;">No variants available for this product.</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'app_fender:admin_product_list' %}" class="btn">Back to Products List</a>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

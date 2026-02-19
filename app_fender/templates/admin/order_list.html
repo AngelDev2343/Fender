@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Orders Management</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        table th {
+            background-color: #000;
+            color: white;
+            font-weight: 600;
+        }
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-right: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-view {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .btn-create {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+        }
+        .btn-create:hover {
+            background-color: #1e7e34;
+        }
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            margin-top: 20px;
+            display: block;
+            width: fit-content;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+        
+        /* ESTILOS PARA LOS ESTADOS DE PEDIDO */
+        .status-pending { 
+            color: orange; 
+            font-weight: bold;
+            background-color: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .status-paid { 
+            color: #0056b3; 
+            font-weight: bold;
+            background-color: #cce5ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .status-sending { 
+            color: #856404; 
+            font-weight: bold;
+            background-color: #ffeaa7;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .status-completed { 
+            color: green; 
+            font-weight: bold;
+            background-color: #d4edda;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .search-container input[type="text"]:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        main a {
+            /* Estilo para los botones Add New */
+            background-color: #28a745;
+            color: white;
+            margin: 8px 0;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+
+    <main>
+        <a href="/admin-panel/" class="back">← Back to the panel</a>
+
+        <style>
+            .back {
+                position: relative;
+                top: 16px;
+                left: 12px;
+            }
+        </style>
+        <div class="admin-container">
+            {% if request.user.is_superuser %}
+            <a href="{% url 'app_fender:admin_order_create' %}" style="position: relative; left: 86%; top: 16px;">Add New Order</a>
+            {% endif %}
+            <h2>Orders Management</h2>
+
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search by order ID, user email, name, city, or country..." onkeyup="filterTable()">
+            </div>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Created</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Full Name</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>
+                            {% if order.user %}
+                                {{ order.user.email }}
+                            {% else %}
+                                Guest
+                            {% endif %}
+                        </td>
+                        <td>{{ order.created_at|date:"Y-m-d" }}</td>
+                        <td>
+                            <span class="status-{{ order.status }}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>{{ order.shipping_full_name }}</td>
+                        <td>{{ order.shipping_city }}</td>
+                        <td>{{ order.shipping_country }}</td>
+                        <td>
+                            <a href="{% url 'app_fender:admin_order_detail' order.id %}" class="btn btn-view">View</a>
+                            
+                            {% if request.user.is_superuser %}
+                            <a href="{% url 'app_fender:admin_order_edit' order.id %}" class="btn btn-edit">Edit</a>
+                            <a href="{% url 'app_fender:admin_order_delete' order.id %}" class="btn btn-delete">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 20px;">No orders found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'app_fender:admin_panel' %}" class="btn btn-back">Back to Admin Panel</a>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+        
+        // Función de búsqueda en la tabla
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.querySelector('table tbody');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Delete Category</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .warning-box h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .warning-box p {
+            color: #856404;
+            margin-bottom: 0;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-delete {
+            background-color: #f44336;
+        }
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
+        .btn-cancel {
+            background-color: #666;
+        }
+        .btn-cancel:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="{% url 'app_fender:home' %}">Home</a></li>
+            <li><a href="{% url 'app_fender:category_list' %}">Category</a></li>
+            <li><a href="{% url 'app_fender:product_list' %}">Shop</a></li>
+            <li><a href="{% url 'app_fender:custom' %}">Custom</a></li>
+            <li><a href="{% url 'app_fender:support' %}">Support</a></li>
+            <li class="cart-icon">
+                <a href="{% url 'app_fender:cart_detail' %}"><img src="{% static 'cart.png' %}" alt="Shopping Cart" title="Shopping Cart" width="30px"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="admin-container">
+            <h2>Delete Category</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ Warning</h3>
+                <p>Are you sure you want to delete the category <strong>{{ category.name }}</strong>?</p>
+                <p>This category has <strong>{{ category.products.count }}</strong> product(s) associated with it.</p>
+                <p>This action cannot be undone.</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-delete">Yes, Delete Category</button>
+                <a href="{% url 'app_fender:admin_category_list' %}" class="btn btn-cancel">Cancel</a>
+            </form>
+        </div>
+    </main>
+    
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

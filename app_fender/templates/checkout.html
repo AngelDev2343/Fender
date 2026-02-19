@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Checkout</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/responsive.css' %}">
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .checkout-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .checkout-section h2 {
+            margin-bottom: 25px;
+            color: #333;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .form-group .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            color: #d32f2f;
+            font-size: 13px;
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .item-details p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-top: 2px solid #000;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-place-order {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-place-order:hover {
+            background: #333;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .btn-back:hover {
+            color: #000;
+        }
+
+
+        .payment-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .payment-form-group {
+            margin-bottom: 20px;
+        }
+
+        .payment-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .payment-form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .payment-form-group input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .payment-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="{% url 'app_fender:home' %}">Home</a></li>
+            <li><a href="{% url 'app_fender:category_list' %}">Category</a></li>
+            <li><a href="{% url 'app_fender:product_list' %}">Shop</a></li>
+            <li><a href="{% url 'app_fender:custom' %}">Custom</a></li>
+            <li><a href="{% url 'app_fender:support' %}">Support</a></li>
+            <li class="cart-icon">
+                <a href="{% url 'app_fender:cart_detail' %}"><img src="{% static 'cart.png' %}" alt="Shopping Cart" title="Shopping Cart" width="30px"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <a href="{% url 'app_fender:cart_detail' %}" class="btn-back" style="margin-left: 20px;">← Back to Cart</a>
+        
+        <div class="checkout-container">
+            <div class="checkout-section">
+                <h2>Shipping Address</h2>
+                <form method="post" id="checkout-form">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                                {% if field.field.required %}<span style="color: red;">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {{ field.errors }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="payment-section">
+                        <h2>Payment Method</h2>
+                        
+                        <div class="payment-form-group">
+                            <label for="credit_card_number">Credit Card Number</label>
+                            <input type="text" id="credit_card_number" name="credit_card_number" placeholder="XXXX XXXX XXXX XXXX" required>
+                        </div>
+                        
+                        <div class="payment-row">
+                            <div class="payment-form-group">
+                                <label for="expiration_date">Expiration Date</label>
+                                <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY" required>
+                            </div>
+                            <div class="payment-form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="123" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-place-order">Place Order</button>
+                </form>
+            </div>
+
+            <div class="checkout-section">
+                <h2>Order Summary</h2>
+                
+                {% for item in cart_items %}
+                <div class="order-summary-item">
+                    <div class="item-details">
+                        <h4>{{ item.product_variant.product.name }}</h4>
+                        <p>Color: {{ item.product_variant.color }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+                    <div class="item-price">
+                        ${{ item.get_total_item_price }} USD
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="order-total">
+                    <span>Total:</span>
+                    <span>${{ total_price }} USD</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

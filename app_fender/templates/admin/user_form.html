@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | {{ action }} User</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+
+        .admin-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+
+        .form-group input[readonly] {
+            background-color: #3f3f3f;
+            cursor: default;
+        }
+        .errorlist {
+            color: #cc0000;
+            list-style-type: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+        .helptext {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .btn {
+            background-color: #f0821b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #c96c14;
+        }
+        .btn-cancel {
+            background-color: #aaa;
+            margin-left: 10px;
+        }
+        .btn-cancel:hover {
+            background-color: #888;
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="{% url 'app_fender:home' %}">Home</a></li>
+            <li><a href="{% url 'app_fender:category_list' %}">Category</a></li>
+            <li><a href="{% url 'app_fender:product_list' %}">Shop</a></li>
+            <li><a href="{% url 'app_fender:custom' %}">Custom</a></li>
+            <li><a href="{% url 'app_fender:support' %}">Support</a></li>
+            <li class="cart-icon">
+                <a href="{% url 'app_fender:cart_detail' %}"><img src="{% static 'cart.png' %}" alt="Shopping Cart" title="Shopping Cart" width="30px"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="admin-container">
+            <h2>{{ action }} User</h2>
+            
+            {% if user and user.pk %}
+            <p><strong>User ID:</strong> {{ user.pk }} | 
+               <strong>Member Since:</strong> {{ user.date_joined|date:"Y-m-d" }}</p>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <span class="helptext">{{ field.help_text }}</span>
+                    {% endif %}
+                    {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn">Save User</button>
+                <a href="{% url 'app_fender:admin_user_list' %}" class="btn btn-cancel">Cancel</a>
+            </form>
+
+            {% if action == 'Edit' and user %}
+            <hr style="margin-top: 30px;">
+            <p>
+                **Nota:** El campo etiquetado como **"Password Hash (Read-Only)"** muestra el hash seguro de la contraseña actual. 
+                **No puedes** cambiar la contraseña modificando este campo.
+                Para cambiar la contraseña, usa una vista dedicada de Django.
+            </p>
+            {% endif %}
+        </div>
+    </main>
+    
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        // Si tu navbar usa lógica de 'hamburguesa', mantén este script
+        // const hamburgerMenu = document.getElementById('hamburger-menu');
+        // const mainNav = document.getElementById('main-nav');
+
+        // if (hamburgerMenu && mainNav) {
+        //     hamburgerMenu.addEventListener('click', () => {
+        //         mainNav.classList.toggle('nav-active');
+        //     });
+        // }
+    </script>
+</body>
+</html>

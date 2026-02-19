@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Category Details</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .category-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        .category-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .category-info strong {
+            display: inline-block;
+            width: 150px;
+            color: #333;
+        }
+        .category-img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+        }
+        .products-list {
+            list-style: none;
+            padding: 0;
+        }
+        .products-list li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .products-list li:last-child {
+            border-bottom: none;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            background-color: #000;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+        .btn-products {
+            background-color: #007bff;
+        }
+        .btn-products:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <h2>Category Details - {{ category.name }}</h2>
+
+            <div class="category-section category-info">
+                <h3>Category Information</h3>
+                <p><strong>ID:</strong> {{ category.id }}</p>
+                <p><strong>Name:</strong> {{ category.name }}</p>
+                <p><strong>Slug:</strong> {{ category.slug }}</p>
+                <p><strong>Products Count:</strong> {{ category.products.count }}</p>
+                
+                {% if category.image %}
+                <p><strong>Image:</strong></p>
+                <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
+                {% else %}
+                <p><strong>Image:</strong> <span style="color: #999;">No image available</span></p>
+                {% endif %}
+            </div>
+
+            {% if category.products.exists %}
+            <div class="category-section">
+                <h3>Products in this Category</h3>
+                <ul class="products-list">
+                    {% for product in category.products.all %}
+                    <li>{{ product.name }} ({{ product.variants.count }} variants)</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'app_fender:admin_product_list' %}?category={{ category.id }}" class="btn btn-products">View Products in this Category</a>
+            <a href="{% url 'app_fender:admin_category_list' %}" class="btn">Back to Categories List</a>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

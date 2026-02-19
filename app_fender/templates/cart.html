@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/responsive.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+                </div>
+         <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="{% url 'app_fender:home' %}">Home</a></li>
+            <li><a href="{% url 'app_fender:category_list' %}">Category</a></li>
+            <li><a href="{% url 'app_fender:product_list' %}">Shop</a></li>
+            <li><a href="{% url 'app_fender:custom' %}">Custom</a></li>
+            <li><a href="{% url 'app_fender:support' %}">Support</a></li>
+            <li class="cart-icon">
+                <a href="{% url 'app_fender:cart_detail' %}"><img src="{% static 'cart.png' %}" alt="Shopping Cart" title="Shopping Cart" width="30px"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <a href="/shop/">← Back to shopping</a>
+
+        <h2>My shopping cart</h2>
+        <div class="productos-contenedor">
+            
+            {% for item in cart_items %}
+            <div class="producto">
+                <img src="{{ item.product_variant.image.url }}" alt="{{ item.product_variant.product.name }}" height="190px">
+                <div class="info">
+                    <h3>{{ item.product_variant.product.name }}</h3>
+                    <p>Color: {{ item.product_variant.color }}</p>
+                    
+                    <p>Quantity: {{ item.quantity }}</p> 
+                    
+                    <p class="precio">${{ item.get_total_item_price }} USD</p> 
+                    </div>
+                <div class="btn-accion">
+                    <a href="{% url 'app_fender:remove_from_cart' item.id %}" class="btn-borrar">Delete</a>
+                    <div class="minus">
+                        <a href="{% url 'app_fender:add_to_cart' item.product_variant.id %}" class="btn-add">+</a>
+                        
+                        <a href="{% url 'app_fender:remove_one_from_cart' item.id %}" class="btn-re">-</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p>Your cart is empty.</p>
+            {% endfor %}
+            </div>
+
+        <div class="total">
+            <h3>Total: ${{ total_price }} USD</h3>
+            <a href="{% url 'app_fender:checkout' %}" class="btn-check">Proceed to Checkout</a>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>

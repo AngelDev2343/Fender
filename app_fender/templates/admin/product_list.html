@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | Products Management</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #000;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .btn-edit, .btn-delete, .btn-back, .btn-view {
+            padding: 6px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+            border: none;
+        }
+        
+        .btn-view {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btn-view:hover {
+            background-color: #117a8b;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 10px;
+            margin-left: 23px;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            margin-top: 20px;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .search-container input[type="text"]:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        main a {
+            /* Estilo para los botones Add New */
+            background-color: #28a745;
+            color: white;
+            margin: 8px 0;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+
+    <main>
+        <a href="/admin-panel/" class="back">← Back to the panel</a>
+
+        <style>
+            .back {
+                position: relative;
+                top: 16px;
+                left: 12px;
+            }
+        </style>
+        <div class="admin-container">
+            {% if request.user.is_superuser %}
+            <a href="{% url 'app_fender:admin_product_create' %}" style="position: relative; left: 86%; top: 16px;">Add New Product</a>
+            {% endif %}
+            <h2>Products Management</h2>
+            
+            {% if selected_category %}
+            <div style="background-color: #e7f3ff; padding: 12px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #007bff;">
+                <strong>Filtered by category:</strong> {{ selected_category.name }}
+                <a href="{% url 'app_fender:admin_product_list' %}" style="margin-left: 15px; color: #007bff; text-decoration: none;">✕ Clear filter</a>
+            </div>
+            {% endif %}
+
+            <!-- BARRA DE BÚSQUEDA -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search by product name, category, or ID..." onkeyup="filterTable()">
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Slug</th>
+                        <th>Variants Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category.name|default:"No category" }}</td>
+                        <td>{{ product.slug }}</td>
+                        <td>{{ product.variants.count }}</td>
+                        <td>
+                            {% if request.user.is_staff or request.user.is_superuser %}
+                            <a href="{% url 'app_fender:admin_product_view' product.id %}" class="btn btn-view">View</a>
+                            {% endif %}
+                            
+                            {% if request.user.is_superuser %}
+                            <a href="{% url 'app_fender:admin_product_edit' product.id %}" class="btn btn-edit">Edit</a>
+                            <a href="{% url 'app_fender:admin_product_delete' product.id %}" class="btn btn-delete">Delete</a>
+                            {% endif %}
+                            </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">No products found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'app_fender:admin_panel' %}" class="btn btn-back">Back to Admin Panel</a>
+        </div>
+    </main>
+    
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+        
+        // Función de búsqueda en la tabla
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.querySelector('table tbody');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

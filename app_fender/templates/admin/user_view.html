@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fender Guitars | User Details</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+        }
+        .admin-container h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .user-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+        }
+        .user-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .user-info strong {
+            display: inline-block;
+            width: 150px;
+            color: #333;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .badge-yes {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-no {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            background-color: #000;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'app_fender:home' %}"><img src="{% static 'logo.png' %}" alt="Fender" width="190px" height="85px" class="logo"></a>
+        <form action="{% url 'app_fender:search' %}" class="form-search">
+            <img src="{% static 'search.png' %}" alt="search" class="lupa">
+            <input type="text" name="search" id="search-input" placeholder="What can we help you find?" class="search">
+        </form>
+        <div class="opciones">
+            <img src="{% static '3barras.png' %}" alt="menu" width="40px" style="margin-right: 14px;" id="hamburger-menu">
+            <a href="{% url 'app_fender:profile' %}"><img src="{% static 'profile.png' %}" alt="profile" width="45px"></a>
+        </div>
+        <div class="saludo-container">
+            {% if user.is_authenticated %}
+                <span>Hi, {{ user.first_name }}</span>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+        <style>
+            .saludo-container {
+                position: absolute;
+                right: 13.5px;
+                top: 85px;
+                color: #c51224;
+                font-weight: bold;
+                font-size: 13px;
+            }
+        </style>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <h2>User Details - {{ user_obj.email }}</h2>
+
+            <div class="user-section user-info">
+                <h3>User Information</h3>
+                <p><strong>ID:</strong> {{ user_obj.id }}</p>
+                <p><strong>Email:</strong> {{ user_obj.email }}</p>
+                <p><strong>First Name:</strong> {{ user_obj.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ user_obj.last_name }}</p>
+                <p><strong>Password Hash:</strong> <div style="background-color: #161616; color: rgb(212, 212, 212); padding: 10px; border-radius: 8px; max-width: fit-content;">{{ user_obj.password }}</div></p>
+                <p><strong>Date Joined:</strong> {{ user_obj.date_joined|date:"F d, Y H:i" }}</p>
+                <p><strong>Last Login:</strong> {{ user_obj.last_login|date:"F d, Y H:i"|default:"Never" }}</p>
+            </div>
+
+            <div class="user-section">
+                <h3>Permissions & Status</h3>
+                <p><strong>Active:</strong> 
+                    {% if user_obj.is_active %}
+                        <span class="badge badge-yes">Yes</span>
+                    {% else %}
+                        <span class="badge badge-no">No</span>
+                    {% endif %}
+                </p>
+                <p><strong>Staff:</strong> 
+                    {% if user_obj.is_staff %}
+                        <span class="badge badge-yes">Yes</span>
+                    {% else %}
+                        <span class="badge badge-no">No</span>
+                    {% endif %}
+                </p>
+                <p><strong>Superuser:</strong> 
+                    {% if user_obj.is_superuser %}
+                        <span class="badge badge-yes">Yes</span>
+                    {% else %}
+                        <span class="badge badge-no">No</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <a href="{% url 'app_fender:admin_user_list' %}" class="btn">Back to Users List</a>
+        </div>
+    </main>
+
+    <footer>
+        Angel Salinas Perez 5J Construye Applicaciones Web
+    </footer>
+
+    <script>
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        hamburgerMenu.addEventListener('click', () => {
+            mainNav.classList.toggle('nav-active');
+        });
+    </script>
+</body>
+</html>
