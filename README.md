@@ -25,7 +25,7 @@ Este proyecto **no es Open-Source** y fue creado únicamente con fines académic
 [¡Abrir demo aquí!](https://angeldev2343.pythonanywhere.com/)
 
 <!-- Reemplaza con tu GIF real -->
-![demo](URL_DE_TU_GIF_AQUI)
+![demo](https://github.com/AngelDev2343/land/blob/main/gifs/fender.gif?raw=true)
 
 </div>
 
